@@ -101,7 +101,6 @@ const initialState = {
     accGrp: null,
     note: null
   },
-  error: '',
   msg: '',
   accFilter: '',
   accList: [],
@@ -118,10 +117,9 @@ const enterSlice = createSlice({
   reducers: {
     clearMessages: (state, action) => {
       state.msg = '';
-      state.error = '';
     },
     setError: (state, action) => {
-      state.error = action.payload;
+      state.msg = `${state.msg} ${action.payload}`.trim();
     },
     setFilter: (state, action) => {
       state.accFilter = action.payload;
@@ -202,7 +200,7 @@ const enterSlice = createSlice({
       })
       .addMatcher(isRejectedAction, (state, action) => {
         // Handle all rejected actions
-        state.error = action.error.message;
+        state.msg = `${state.msg} ${action.error.message}`.trim();
       });
   }
 });
