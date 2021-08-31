@@ -1,0 +1,190 @@
+<h1>Enter</h1>
+{{!-- DISPLAY HEADING and MESSAGE --}}
+<table class='head'>
+  <tr>
+    <td class='title'>Expense Tracker<br /><br /></td>
+    <td class='msg' id='msg'>{{msg}}</td>
+  </tr>
+</table>
+
+{{!-- # FORMS --}}
+<table class='actions'>
+  <tr>
+    {{!-- # First cell/column  --}}
+    <td>
+      {{!-- # ENTER A TRANSACTION FORM --}}
+      <fieldset><legend>Enter a Transaction</legend> 
+        <form method='post' action='/enter' id='f_add_trans'>
+          <label for='date'>Date:</label>
+          <input name='date' id='date' value={{todaysDate}} size=10>&nbsp;&nbsp;
+          <span class='radio'>
+            <input type='radio' name='sign' id='plus' value='+'>
+            <label for='plus'>+</label>
+          </span>
+          <span class='radio'>
+            <input type='radio' name='sign' id='minus' value='-' checked>
+            <label for='minus'>-</label>
+          </span>&nbsp;&nbsp;
+          <label for='amt'>Amt:</label>
+          <input name='amt' id='amt' size=9><br>
+          <label for='pri_acc'>Account:</label>   
+          <select name='pri_acc' id='pri_acc'>
+            {{> accGrpList }}
+          </select><br>
+          <label for='comments'>Comments:</label><br>
+          <textarea name='comments' id='comments' rows='3' cols='30'></textarea><br><br>  
+          <label for='link_acc'>(Optionally perform reverse operation on linked account.)<br>
+            Linked Account:
+          </label>
+          <select name='link_acc' id='link_acc'>
+            {{> accGrpList }}
+          </select><br>  
+          <input type='submit' name='submit_trans' id='submit_trans' value='Enter Transaction'>
+        </form>
+      </fieldset>
+      <br>
+
+      {{!-- # CREATE A REPORT --}}
+      <fieldset><legend>Create a Report</legend>
+        <form method='get' action='/report' id='f_rpt'>
+          <label for='start_date'>Enter 0 for date if you don't care:<br>
+            Start Date:
+          </label>
+          <input name='start_date' id='start_date' value='0' size=10>&nbsp;&nbsp;
+          <label for='end_date'>End Date:</label>
+          <input name='end_date' id='end_date' value='0' size=10><br>
+          <label for='rpt_acc'>Account:</label>
+          <select name='rpt_acc' id='rpt_acc'>
+            {{> accList }}
+          </select><br>
+          <span class='radio'>
+            <input type='radio' name='rpt_type' id='balance_sheet' value='Balance Sheet'>
+            <label for='balance_sheet'>Balance Sheet</label>
+          </span>
+          <span class='radio'>
+            <input type='radio' name='rpt_type' id='raw_data' values='Raw Data' checked>
+            <label for='raw_data'>Raw Data</label>
+          </span>&nbsp;&nbsp;
+          <input type='submit' name='submit_rpt' id='submit_rpt' value='Create Report'> 
+        </form>
+      </fieldset>
+      <br>
+
+      {{!-- # EDIT MODE --}}
+      <fieldset><legend>Enter Edit Mode</legend>
+        <form method='get' action='/edit' id='f_edit'>
+          <label for='edit_priacc'>Account:</label>
+          <select name='edit_priacc' id='edit_priacc'>
+            {{> accList }}
+          </select>
+          <input type='submit' name='submit_interactive_mode' id='submit_interactive_mode' value='Edit Mode'>
+        </form>
+      </fieldset>
+      <br>
+
+      {{!-- # MEREGE TWO ACCOUNTS --}}
+      <fieldset><legend>Merge Accounts</legend>
+        <form method='post', action='/enter' id='f_merge'>
+          <label for='base_acc'>Base account:</label>
+          <select name='base_acc' id='base_acc'>
+            {{> accList }}
+          </select><br>
+          <label for='sec_acc'>2nd account:</label>
+          <select name='sec_acc' id='sec_acc'>
+            {{> accList }}
+          </select>&nbsp;&nbsp;
+          <input type='submit' name='submit_merge_acc' id='submit_merge_acc' value='Merge Accounts'>
+        </form>
+      </fieldset>
+      <br>
+    {{!-- # End of 1st cell/column --}}
+    </td>
+
+    {{!-- # Start of 2nd cell/column --}}
+    <td>
+      {{!-- # ADD AN ACCOUNT FORM --}}
+      <fieldset><legend>Add an Account</legend>
+        <form method='post' action='/enter' id='f_add_acc'>
+          <label for='new_acc'>Account:</label>
+          <input name='new_acc' id='new_acc' size=30>
+          <input type='submit' name='submit_new_acc' id='submit_new_acc' value='Add Account'>
+        </form>
+      </fieldset>
+      <br>
+
+      {{!-- # REMOVE AN ACCOUNT --}}
+      <fieldset><legend>Remove an Account</legend>
+        <form method='post' action='/enter' id='f_rmv_acc'>
+          <label for='rmv_acc'>Account:</label>
+          <select name='rmv_acc' id='rmv_acc'>
+            {{> accList }}
+          </select>
+          <input type='submit' name='submit_rmv_acc' id='submit_rmv_acc' value='Remove Account'>
+        </form>
+      </fieldset>
+      <br>
+
+      {{!-- # ADD A GROUP FORM --}}
+      <fieldset><legend>Add a Group</legend>
+        <form method='post'  action='/enter' id='f_add_grp'>
+          <label for='grp_acc'>Account:</label>
+          <select name='grp_acc' id='grp_acc'>
+            {{> accList }}
+          </select><br>
+          <label for='new_grp'>Group:</label>
+          <input name='new_grp' id='new_grp' size=30>
+          <input type='submit' name='submit_new_grp' id='submit_new_grp' value='Add Group'>
+        </form>
+      </fieldset>
+      <br>
+
+      {{!-- # REMOVE A GROUP --}}
+      <fieldset><legend>Remove a Group</legend>
+        <form method='post' action='/enter' id='f_rmv_grp'>
+          <label for='rmv_grp'>Groups:</label>
+          <select name='rmv_grp' id='rmv_grp'>
+            {{> accGrpList }}
+          </select><br>
+          <input type='submit' name='submit_rmv_grp' id='submit_rmv_grp'
+            value='Remove Group'>
+          <span> OR </span>
+          <input type='submit' name='submit_rmv_grp_trans' id='submit_rmv_grp_trans'
+            value='Remove Transactions By Group'>
+        </form>
+      </fieldset>
+      <br>
+
+      {{!-- # REMOVE A TRANSACTION --}}
+      <fieldset><legend>Remove a Transaction</legend>
+        <form method='post' action='/enter' id='f_rmv_trans'>
+          <label for='trans_acc'>Account:</label>
+          <select name='trans_acc' id='trans_acc'>
+            {{> accList }}
+          </select>&nbsp;&nbsp;
+          <label for='trans_num'>Trans #:</label>
+          <input name='trans_num' id='trans_num' size=5><br>
+          <input type='submit' name='submit_rmv_trans' id='submit_rmv_trans'
+            value='Remove Transaction'>
+        </form>
+      </fieldset>
+      <br>
+
+      {{!-- # COPY AN ACCOUNT --}}
+      <fieldset><legend>Copy an Account</legend>
+        <form method='post' action='/enter' id='f_copy'>
+          <label for='old_acc'>Account to be copied:</label>
+          <select name='old_acc' id='old_acc'>
+            {{> accList }}
+          </select><br>
+          <label for='duplicate_acc'>New Account Name:</label>
+          <input name='duplicate_acc' id='duplicate_acc' size=30><br>
+          <input type='submit' name='submit_copy_acc' id='submit_copy_acc'
+            value='Copy Account'>
+          <label for='cp_acc_trans'>Copy Transactions?</label>
+          <input type='checkbox' name='cp_acc_trans' id='cp_acc_trans' checked value='YES'>
+        </form>
+      </fieldset>
+    {{!-- # End of 2nd cell/column --}}
+    </td>
+  </tr>
+</table>

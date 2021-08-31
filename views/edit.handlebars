@@ -1,0 +1,110 @@
+<h1>Edit Mode</h1>
+{{!-- EDIT MODE --}}
+{{!-- # Msg area --}}
+{{#if (containsError msg)}}
+<div class='error' id='msg'>{{msg}}</div>
+{{else}}
+<div class='info' id='msg'>{{msg}}</div>
+{{/if}}
+{{!-- # Heading with links --}}
+<div class='table'>
+  <div class='row'>
+    {{!-- # put link back to starting page --}}
+    <div class='colhead'><a href='/enter'>Back to main page</a></div>
+    {{!-- # Reload page link --}}
+    <div class='colhead'><a href={{priAccUrl}}>Reload this page</a></div>
+    <div class='colcell'><a name='top' href='#bottom'>To Bottom</a></div>
+  </div>
+  <div class='row'> 
+    <div class='title colhead'>Edit Mode</div>
+    <div class='title colhead'>{{priAcc}}</div>
+    <div class='colcell'></div>
+  </div>
+  {{!-- # Emtpty row to create space between heading and table below --}}
+  <div class='row'>
+    <div class='title colhead'>&nbsp;</div>
+    <div class='title colhead'>&nbsp;</div>
+    <div class='colcell'></div>
+  </div>
+</div>
+
+{{!-- # print out raw data in edit mode --}}
+{{!-- # File format: date, trans #, group, comments, amt, balance --}}
+<div class='table fullwidth'>
+  {{#each transactions}}
+    {{#if (toEdit transNum editId)}}
+    {{else}}
+      <div class='row' id={{join 'trans_' transNum}}>
+        <div class='colDate'>{{date}}</div>
+        <div class='colTrans'>
+          <button 
+            onclick='insertForm({{priAcc}},{{date}},{{transNum}},{{group}},{{comments}},{{amt}},{{balance}})'>
+            {{join 'Edit ' transNum}}
+          </button>
+        </div>
+        <div class='colGrp'>{{lowercase group}}</div> 
+        <div class='colAmt'>{{toDollars amt}}</div> 
+        <div class='colBal'>{{toDollars balance}}</div> 
+        <div class='colNote'>&nbsp; {{comments}}</div>
+      </div>
+    {{/if}}
+  {{/each}}
+
+  {{!-- # Put 'add a transaction' form at end of table --}}
+  <form method='post' action='/edit' id='trans_add' class='row'
+    onsubmit='return validateAddTransaction(this)'>
+    <div class='colDate'>
+      <input name='date' value={{todaysDate}} size=10
+        onBlur='validateDate(this, document.getElementById('msg'))'>
+    </div>
+    <div class='colTrans'>
+      <input type='hidden' name='op' value='add'>
+      <input type='hidden' name='edit_priacc' value={{priAcc}}>
+    </div>
+    <div class='colGrp'>
+      <select name='grp' id='grp'
+        onBlur='validateAccGrp(this, document.getElementById('msg'))'>
+        {{> accGrpList }}
+      </select>
+    </div>
+    <div class='colAmt'>
+      <input name='amt' size=9, 
+        onBlur='validateAmt(this, document.getElementById('msg'))'>
+    </div>
+    <div class='colBal'>
+      <input type='submit' name='submit_add_trans' id='submit_add_trans' value='Add'>
+    </div>
+    <div class='colNote'>
+      <input name='note' size='99%'
+        onBlur='validateNote(this, document.getElementById('msg'))'>
+    </div>
+  </form>
+{{!-- # End of table --}}
+</div>
+
+{{!-- # Table with links --}}
+<div class='table'>
+  {{!-- # empty row to create space between table above and footer --}}
+  <div class='row'>
+    <div class='colhead'>&nbsp;</div>
+    <div class='colhead'>&nbsp;</div>
+    <div class='colcell'>&nbsp;</div>
+  </div>
+  <div class='row'>
+    {{!-- # put link back to starting page --}}
+    <div class='colhead'><a href='/enter'>Back to main page</a></div>
+    <div class='colhead'><a name='bottom' href='#top'>To Top</a></div>
+
+    <form method='get' action='/edit' id='f_edit'>
+      <div class='colcell'>
+        <label for='edit_priacc'>Switch to:</label>
+        <select name='edit_priacc' id='edit_priacc'>
+          {{> accList }}
+        </select>
+        <input type='submit' name='submit_interactive_mode' id='submit_interactive_mode'
+          value='Edit Mode'>
+      </div>
+    </form>
+  </div>
+</div>
+

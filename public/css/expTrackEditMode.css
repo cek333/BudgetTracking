@@ -1,0 +1,24 @@
+div.table { display: table; border-collapse: collapse; }
+.fullwidth { width: 100%; }
+.row { display: table-row; }
+.title { font-weight:bold; font-size:14pt; }
+.colhead { display: table-cell; width: 13em; text-align:center; }
+.colcell { display: table-cell; }
+.colDate { display: table-cell; width: 6em; border: solid thin; 
+        vertical-align: middle; }
+.colTrans { display: table-cell; width: 5em; border: solid thin; 
+        vertical-align: middle; }
+.colGrp { display: table-cell; width: 13em; border: solid thin; 
+        vertical-align: middle; }
+.colAmt { display: table-cell; width: 5em; border: solid thin; 
+        text-align: right; vertical-align: middle; }
+.colBal { display: table-cell; width: 5em; border: solid thin; 
+        text-align: right; vertical-align: middle; }
+.colNote { display: table-cell; border: solid thin; }
+.colshared { display: inline; }
+.colgo { border: solid; }
+div#msg { position: fixed; right: 300px; top: 10px;
+          background: rgb(0, 0, 0); /* fallback */
+          background: rgba(255, 255, 255, 1); }
+div.info { color: green; }
+div.error { color: red; }
