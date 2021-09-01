@@ -13,7 +13,7 @@ const {
   rmvTransactionsByGroup,
   copyAccount,
   mergeAccounts,
-  setFilter,
+  applyFilter,
   // selectors
   getAccList,
   getAccGrpList,
@@ -22,7 +22,7 @@ const BLANK_ACC_GRP = '--/--';
 
 describe.skip('Testing the /enter endpoint', () => {
   beforeAll(async () => {
-    await store.dispatch(setFilter('enter'));
+    await store.dispatch(applyFilter('enter'));
   });
   test('Add accounts', async () => {
     try {
