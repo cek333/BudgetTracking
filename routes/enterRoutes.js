@@ -52,7 +52,7 @@ router.get('/', function (req, res) {
 });
 
 router.post('/add_trans', async function (req, res) {
-  const { date, sign, amt, pri_acc: priAcc, comments, link_acc: linkAcc } = req.body;
+  const { date, sign, amt, pri_acc: priAccGrp, comments, link_acc: linkAccGrp } = req.body;
   const allowZero = false;
   const BLANK_ACC_GRP = '--/--';
   const accGrpList = getAccGrpList(store.getState());
@@ -60,14 +60,14 @@ router.post('/add_trans', async function (req, res) {
   try {
     if (validateDate(date, allowZero) &&
         validatePositiveAmt(amt) &&
-        validateAccGrp(priAcc, accGrpList) &&
+        validateAccGrp(priAccGrp, accGrpList) &&
         validateNote(note)) {
-      const [acc, grp] = priAcc.split('/');
+      const [acc, grp] = priAccGrp.split('/');
       const priAmt = Number(amt) * (sign === '-' ? -1 : 1);
       await store.dispatch(addTransaction({ acc, date, grp, amt: priAmt, note }));
-      if (linkAcc !== BLANK_ACC_GRP && validateAccGrp(linkAcc, accGrpList)) {
+      if (linkAccGrp !== BLANK_ACC_GRP && validateAccGrp(linkAccGrp, accGrpList)) {
         const linkAmt = priAmt * -1;
-        const [acc, grp] = linkAcc.split('/');
+        const [acc, grp] = linkAccGrp.split('/');
         await store.dispatch(addTransaction({ acc, date, grp, amt: linkAmt, note }));
       }
     }
@@ -131,11 +131,11 @@ router.post('/add_grp', async function (req, res) {
 });
 
 router.post('/rmv_grp', async function (req, res) {
-  const { rmv_grp: rmvGrp } = req.body;
+  const { rmv_grp: rmvAccGrp } = req.body;
   const accGrpList = getAccGrpList(store.getState());
   try {
-    if (validateAccGrp(rmvGrp, accGrpList)) {
-      const [acc, grp] = rmvGrp.split('/');
+    if (validateAccGrp(rmvAccGrp, accGrpList)) {
+      const [acc, grp] = rmvAccGrp.split('/');
       await store.dispatch(rmvGroup({ acc, grp }));
     }
   } catch (err) {
@@ -145,11 +145,11 @@ router.post('/rmv_grp', async function (req, res) {
 });
 
 router.post('/rmv_trans_by_grp', async function (req, res) {
-  const { rmv_grp: rmvGrp } = req.body;
+  const { rmv_grp: rmvAccGrp } = req.body;
   const accGrpList = getAccGrpList(store.getState());
   try {
-    if (validateAccGrp(rmvGrp, accGrpList)) {
-      const [acc, grp] = rmvGrp.split('/');
+    if (validateAccGrp(rmvAccGrp, accGrpList)) {
+      const [acc, grp] = rmvAccGrp.split('/');
       await store.dispatch(rmvTransactionsByGroup({ acc, grp }));
     }
   } catch (err) {
