@@ -185,10 +185,6 @@ const enterSlice = createSlice({
       })
       .addCase(copyAccount.fulfilled, (state, action) => {
         const { frAcc, toAcc, cpTrans } = action.payload;
-        // const accFilter = state.accFilter;
-        // if (accFilter && (toAcc.indexOf(accFilter) >= 0)) {
-        //   state.accList = state.accList.concat(toAcc).sort();
-        // }
         if (cpTrans) {
           state.msg = `${state.msg} Account attributes of ${frAcc} copied to ${toAcc}.`.trim();
         } else {
