@@ -1,4 +1,4 @@
-<option value='--/--' selected>--/--</option>
-{{#each accGrpList}}
-  <option value={{.}}>{{.}}</option>
+<option value='--/--' {{#if (matchesGrp '--/--' default)}}selected{{/if}}>--/--</option>
+{{#each agList}}
+  <option value={{.}} {{#if (matchesGrp . ../default)}}selected{{/if}}>{{.}}</option>
 {{/each}}

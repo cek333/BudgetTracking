@@ -1,4 +1,4 @@
-<option value='--' selected>--</option>
-{{#each accList}}
-  <option value={{.}}>{{.}}</option>
+<option value='--' {{#if (matches '--' default)}}selected{{/if}}>--</option>
+{{#each aList}}
+  <option value={{.}} {{#if (matches . ../default)}}selected{{/if}}>{{.}}</option>
 {{/each}}

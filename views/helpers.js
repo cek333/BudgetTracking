@@ -20,5 +20,11 @@ module.exports = {
   },
   toEdit: (id, editId) => {
     return editId !== null && id === editId;
+  },
+  matches: (text1, text2) => {
+    return text1 === text2;
+  },
+  matchesGrp: (accGrp, grp) => {
+    return accGrp.indexOf(`/${grp}`) >= 0;
   }
 };

@@ -29,7 +29,7 @@
           <input name='amt' id='amt' size=9><br>
           <label for='pri_acc'>Account:</label>   
           <select name='pri_acc' id='pri_acc'>
-            {{> accGrpList }}
+            {{> accGrpListOpts agList=accGrpList default='--' }}
           </select><br>
           <label for='comments'>Comments:</label><br>
           <textarea name='comments' id='comments' rows='3' cols='30'></textarea><br><br>  
@@ -37,7 +37,7 @@
             Linked Account:
           </label>
           <select name='link_acc' id='link_acc'>
-            {{> accGrpList }}
+            {{> accGrpListOpts agList=accGrpList default='--' }}
           </select><br>  
           <input type='submit' name='submit_trans' id='submit_trans' value='Enter Transaction'>
         </form>
@@ -55,7 +55,7 @@
           <input name='end_date' id='end_date' value='0' size=10><br>
           <label for='rpt_acc'>Account:</label>
           <select name='rpt_acc' id='rpt_acc'>
-            {{> accList }}
+            {{> accListOpts aList=accList default='--' }}
           </select><br>
           <span class='radio'>
             <input type='radio' name='rpt_type' id='balance_sheet' value='Balance Sheet'>
@@ -75,7 +75,7 @@
         <form method='get' action='/edit' id='f_edit'>
           <label for='edit_priacc'>Account:</label>
           <select name='edit_priacc' id='edit_priacc'>
-            {{> accList }}
+            {{> accListOpts aList=accList default='--' }}
           </select>
           <input type='submit' name='submit_interactive_mode' id='submit_interactive_mode' value='Edit Mode'>
         </form>
@@ -87,11 +87,11 @@
         <form method='post', action='/enter' id='f_merge'>
           <label for='base_acc'>Base account:</label>
           <select name='base_acc' id='base_acc'>
-            {{> accList }}
+            {{> accListOpts aList=accList default='--' }}
           </select><br>
           <label for='sec_acc'>2nd account:</label>
           <select name='sec_acc' id='sec_acc'>
-            {{> accList }}
+            {{> accListOpts aList=accList default='--' }}
           </select>&nbsp;&nbsp;
           <input type='submit' name='submit_merge_acc' id='submit_merge_acc' value='Merge Accounts'>
         </form>
@@ -117,7 +117,7 @@
         <form method='post' action='/enter' id='f_rmv_acc'>
           <label for='rmv_acc'>Account:</label>
           <select name='rmv_acc' id='rmv_acc'>
-            {{> accList }}
+            {{> accListOpts aList=accList default='--' }}
           </select>
           <input type='submit' name='submit_rmv_acc' id='submit_rmv_acc' value='Remove Account'>
         </form>
@@ -129,7 +129,7 @@
         <form method='post'  action='/enter' id='f_add_grp'>
           <label for='grp_acc'>Account:</label>
           <select name='grp_acc' id='grp_acc'>
-            {{> accList }}
+            {{> accListOpts aList=accList default='--' }}
           </select><br>
           <label for='new_grp'>Group:</label>
           <input name='new_grp' id='new_grp' size=30>
@@ -143,7 +143,7 @@
         <form method='post' action='/enter' id='f_rmv_grp'>
           <label for='rmv_grp'>Groups:</label>
           <select name='rmv_grp' id='rmv_grp'>
-            {{> accGrpList }}
+            {{> accGrpListOpts agList=accGrpList default='--' }}
           </select><br>
           <input type='submit' name='submit_rmv_grp' id='submit_rmv_grp'
             value='Remove Group'>
@@ -159,7 +159,7 @@
         <form method='post' action='/enter' id='f_rmv_trans'>
           <label for='trans_acc'>Account:</label>
           <select name='trans_acc' id='trans_acc'>
-            {{> accList }}
+            {{> accListOpts aList=accList default='--' }}
           </select>&nbsp;&nbsp;
           <label for='trans_num'>Trans #:</label>
           <input name='trans_num' id='trans_num' size=5><br>
@@ -174,7 +174,7 @@
         <form method='post' action='/enter' id='f_copy'>
           <label for='old_acc'>Account to be copied:</label>
           <select name='old_acc' id='old_acc'>
-            {{> accList }}
+            {{> accListOpts aList=accList default='--' }}
           </select><br>
           <label for='duplicate_acc'>New Account Name:</label>
           <input name='duplicate_acc' id='duplicate_acc' size=30><br>
