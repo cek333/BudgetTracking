@@ -18,6 +18,14 @@ const refreshStore = createAsyncThunk(
   }
 );
 
+const applyFilter = createAsyncThunk(
+  'enter/applyFilter',
+  async (filter, thunkAPI) => {
+    thunkAPI.dispatch(setFilter(filter));
+    await thunkAPI.dispatch(refreshStore());
+  }
+);
+
 const addAccount = createAsyncThunk(
   'enter/addAccount',
   async (newAcc) => {
@@ -102,6 +110,7 @@ const initialState = {
     note: null
   },
   msg: '',
+  error: '',
   accFilter: '',
   accList: [],
   accGrpList: []
@@ -117,9 +126,10 @@ const enterSlice = createSlice({
   reducers: {
     clearMessages: (state, action) => {
       state.msg = '';
+      state.error = '';
     },
     setError: (state, action) => {
-      state.msg = `${state.msg} ${action.payload}`.trim();
+      state.error = action.payload;
     },
     setFilter: (state, action) => {
       state.accFilter = action.payload;
@@ -194,9 +204,10 @@ const enterSlice = createSlice({
       .addCase(mergeAccounts.fulfilled, (state, account) => {
         state.msg = `${state.msg} Merge Successful.`.trim();
       })
+      // .addCase(applyFilter.fulfilled, (state, action) => { }) // No action needed for applyFilter.fulfilled
       .addMatcher(isRejectedAction, (state, action) => {
         // Handle all rejected actions
-        state.msg = `${state.msg} ${action.error.message}`.trim();
+        state.error = action.error.message;
       });
   }
 });
@@ -218,10 +229,10 @@ module.exports = {
   rmvTransactionsByGroup,
   copyAccount,
   mergeAccounts,
+  applyFilter,
   // (sync) actions
   clearMessages,
   setError,
-  setFilter,
   // selectors
   getAccList,
   getAccGrpList,
