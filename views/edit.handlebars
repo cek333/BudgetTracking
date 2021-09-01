@@ -32,20 +32,57 @@
 {{!-- # File format: date, trans #, group, comments, amt, balance --}}
 <div class='table fullwidth'>
   {{#each transactions}}
-    {{#if (toEdit transNum editId)}}
+    {{#if (toEdit id ../editId)}}
+      <form method='post' action='/edit' id={{join 'trans_' id}} class='row'
+        onsubmit='return validateInsertForm(this)'>
+        <div class='colDate'>
+          <input type='text' name='date' value={{date}} size='10'
+            onblur='validateDate(this, document.getElementById("msg"))' />
+          <input type='hidden' name='edit_priacc' value={{../priAcc}} />
+        </div>
+        <div class='colTrans'>
+          <input type='hidden' name='trans_num' value={{id}} />
+          {{fourDigit id}}
+        </div>
+        <div class='colGrp'>
+          <select name='grp'>{{> accGrpListOpts agList=../accGrpList default=category }}</select>
+        </div>
+        <div class='colAmt'>
+          <input type='text' name='amt' value={{toDollars amount}} size='9'
+            onblur='validateAmt(this, document.getElementById("msg"))' />
+        </div>
+        <div class='colBal'>{{toDollars balance}}</div>
+        <div class='colNote'>
+          <input type='text' name='note' value='{{note}}' size='99%'
+            onblur='validateNote(this, document.getElementById("msg"))'  /><br />
+          <div class='colshared'>Move to:
+            <select name='dstacc'>{{> accListOpts aList=../accList default=../priAcc }}</select>
+          </div>&nbsp;&nbsp;&nbsp;&nbsp;
+          <div class='colshared colgo'>
+            <input type='radio' name='op' value='update' checked='checked' />
+            <label for='update'>Update</label>
+            <input type='radio' name='op' value='delete' />
+            <label for='delete'>Delete</label>
+            <input type='radio' name='op' value='move' />
+            <label for='move'>Move</label>&nbsp;&nbsp;
+            <input type='submit' name='go' value='Go' />
+          </div>
+        </div>
+      </form>
     {{else}}
-      <div class='row' id={{join 'trans_' transNum}}>
+      <div class='row' id={{join 'trans_' id}}>
         <div class='colDate'>{{date}}</div>
         <div class='colTrans'>
-          <button 
-            onclick='insertForm({{priAcc}},{{date}},{{transNum}},{{group}},{{comments}},{{amt}},{{balance}})'>
-            {{join 'Edit ' transNum}}
-          </button>
+          <form method='post' action='/edit'>
+            <button type='submit' name='submit_edit_trans' value={{id}}>
+              {{join 'Edit ' (fourDigit id)}}
+            </button>
+          </form>
         </div>
-        <div class='colGrp'>{{lowercase group}}</div> 
-        <div class='colAmt'>{{toDollars amt}}</div> 
-        <div class='colBal'>{{toDollars balance}}</div> 
-        <div class='colNote'>&nbsp; {{comments}}</div>
+        <div class='colGrp'>{{lowercase category}}</div>
+        <div class='colAmt'>{{toDollars amount}}</div>
+        <div class='colBal'>{{toDollars balance}}</div>
+        <div class='colNote'>&nbsp; {{note}}</div>
       </div>
     {{/if}}
   {{/each}}
@@ -55,7 +92,7 @@
     onsubmit='return validateAddTransaction(this)'>
     <div class='colDate'>
       <input name='date' value={{todaysDate}} size=10
-        onBlur='validateDate(this, document.getElementById('msg'))'>
+        onBlur='validateDate(this, document.getElementById("msg"))'>
     </div>
     <div class='colTrans'>
       <input type='hidden' name='op' value='add'>
@@ -63,20 +100,20 @@
     </div>
     <div class='colGrp'>
       <select name='grp' id='grp'
-        onBlur='validateAccGrp(this, document.getElementById('msg'))'>
-        {{> accGrpList }}
+        onBlur='validateAccGrp(this, document.getElementById("msg"))'>
+        {{> accGrpListOpts agList=accGrpList default='--' }}
       </select>
     </div>
     <div class='colAmt'>
       <input name='amt' size=9, 
-        onBlur='validateAmt(this, document.getElementById('msg'))'>
+        onBlur='validateAmt(this, document.getElementById("msg"))'>
     </div>
     <div class='colBal'>
       <input type='submit' name='submit_add_trans' id='submit_add_trans' value='Add'>
     </div>
     <div class='colNote'>
       <input name='note' size='99%'
-        onBlur='validateNote(this, document.getElementById('msg'))'>
+        onBlur='validateNote(this, document.getElementById("msg"))'>
     </div>
   </form>
 {{!-- # End of table --}}
@@ -99,7 +136,7 @@
       <div class='colcell'>
         <label for='edit_priacc'>Switch to:</label>
         <select name='edit_priacc' id='edit_priacc'>
-          {{> accList }}
+          {{> accListOpts aList=accList default='--' }}
         </select>
         <input type='submit' name='submit_interactive_mode' id='submit_interactive_mode'
           value='Edit Mode'>
