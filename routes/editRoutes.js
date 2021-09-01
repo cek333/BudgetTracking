@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 const transactions = [
-  { date: '2010-10-10', transNum: 1000, group: 'mbna', comments: 'paid balance', amt: 10, balance: 100 },
-  { date: '2010-11-10', transNum: 1010, group: 'visa', comments: 'paid balance', amt: 20, balance: 80 },
-  { date: '2010-12-10', transNum: 1020, group: 'food', comments: 'groceries', amt: 30, balance: 50 }
+  { date: '2010-10-10', id: 1000, category: 'mbna', note: 'paid balance', amount: 10, balance: 100 },
+  { date: '2010-11-10', id: 1010, category: 'visa', note: 'paid balance', amount: 20, balance: 80 },
+  { date: '2010-12-10', id: 1020, category: 'food', note: 'groceries', amount: 30, balance: 50 }
 ];
 const accList = ['bank_2020', 'cash_2020', 'charity_2020'];
 const accGrpList = [
@@ -19,7 +19,8 @@ const data = {
   priAccUrl: '/edit?edit_priacc=bank_2020',
   transactions,
   accList,
-  accGrpList
+  accGrpList,
+  editId: null
 };
 
 // Home page route
@@ -54,8 +55,15 @@ router.get('/edit', function (req, res) {
 */
 });
 
-router.post('/edit', function(req, res) {
+router.post('/edit', function (req, res) {
   console.log(req.body);
+  const { submit_edit_trans: editIdStr = null, go = null } = req.body;
+  if (editIdStr !== null) {
+    data.editId = Number(editIdStr);
+  }
+  if (go !== null) {
+    data.editId = null;
+  }
   res.redirect('/edit');
 });
 
