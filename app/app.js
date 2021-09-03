@@ -23,8 +23,8 @@ app.set('view engine', 'handlebars');
 // Import routes and give the server access to them.
 const enterRoutes = require('../routes/enterRoutes.js');
 const editRoutes = require('../routes/editRoutes.js');
-const resetMessages = require('../routes/resetMessages.js');
-app.post('/enter/*', resetMessages);
+const resetEnterMessages = require('../routes/resetEnterMessages.js');
+app.post('/enter/*', resetEnterMessages);
 app.use(editRoutes);
 app.use('/enter', enterRoutes);
 
