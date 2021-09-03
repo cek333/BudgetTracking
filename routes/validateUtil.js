@@ -88,6 +88,7 @@ function validateTransNum(choice) {
 module.exports = {
   validateDate,
   validatePositiveAmt,
+  validateAmt,
   validateAcc,
   validateAccGrp,
   validateName,
