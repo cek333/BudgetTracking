@@ -1,5 +1,28 @@
 const express = require('express');
 const router = express.Router();
+const store = require('../store/store');
+const {
+    refreshStore,
+    addTransaction,
+    rmvTransaction,
+    updateTransaction,
+    mvTransaction,
+    clearMessages,
+    setError,
+    setEditId,
+    getAccList,
+    getAccGrpList
+} = require('../store/slices/editSlice');
+const {
+  validateDate,
+  validateAmt,
+  validateAcc,
+  validateAccGrp,
+  validateNote,
+  validateTransNum,
+  getAccList,
+  getAccGrpList
+} = require('./validateUtil');
 
 const transactions = [
   { date: '2010-10-10', id: 1000, category: 'mbna', note: 'paid balance', amount: 10, balance: 100 },
@@ -27,32 +50,78 @@ const data = {
 router.get('/edit', function (req, res) {
   console.log('get /edit');
   res.render('edit', { layout: 'edit', ...data });
-/*
-  # print out raw data in edit mode
-  open (ACC, '$priAcc.acc') or 
-    endPage('editMode: ERROR opening account $priAcc', 1);
+});
 
-  # File format:
-  # date, trans #, group, comments, amt, balance
+router.post('/editing', async function (req, res) {
+  const {
+    date,
+    amt,
+    edit_priacc: priAcc,
+    grp: accGrp,
+    note: noteTmp,
+    op,
+    dstacc = '', // For mvTrans
+    trans_num: transNum // For rmvTrans/mvTrans/updateTrans
+  } = req.body;
 
-  #<table rules=\'all\' border=\'3\'>\n';
-  <div class='table fullwidth'>\n';
-  <ACC>; # remove line with transaction number
-  while(<ACC>) {
-    s/\s*$//;
-    encode_entities($_);
-    @rgTrans = split /,/;
-    $transNum = $rgTrans[1];
-    print qq(<div class='row' id='trans_$transNum'>) .
-      qq(<div class='colDate'>$rgTrans[0]</div>\n) .
-      qq(  <div class='colTrans'><input type='button' onclick='insertForm('$priAcc','$rgTrans[0]','$rgTrans[1]','$rgTrans[2]','$rgTrans[3]','$rgTrans[4]','$rgTrans[5]')' value='Edit $transNum' /></div>\n) .
-      qq(  <div class='colGrp'>) . lc($rgTrans[2]) . qq(</div>) . 
-      qq(<div class='colAmt'>$rgTrans[4]</div>\n) . 
-      qq(  <div class='colBal'>$rgTrans[5]</div>) . 
-      qq(<div class='colNote'>&nbsp; $rgTrans[3]</div></div>\n);
+  const allowZero = false;
+  const state = store.getState();
+  const accList = getAccList(state);
+  const accGrpList = getAccGrpList(state);
+  const note = noteTmp.trim().length === 0 ? 'n/a' : noteTmp.trim();
+
+  try {
+    // Clear previous error messages
+    await store.dispatch(clearMessages());
+    // Process post request
+    switch(op) {
+      case 'update': {
+        if (validateDate(date, allowZero) &&
+            validateAccGrp(accGrp, accGrpList) &&
+            validateAmt(amt) &&
+            validateNote(note) &&
+            validateTransNum(transNum)) {
+          const [acc, grp] = accGrp.split('/');
+          await store.dispatch(updateTransaction({ acc, transNum, date, grp, amt, note }));
+        }
+        break;
+      }
+      case 'delete': {
+        if (validateAcc(priAcc, accList) &&
+            validateTransNum(transNum)) {
+          await store.dispatch(rmvTransaction({ acc: priAcc, transNum }));
+        }
+        break;
+      }
+      case 'move': {
+        if (validateDate(date, allowZero) &&
+            validateAccGrp(accGrp, accGrpList) &&
+            validateAmt(amt) &&
+            validateNote(note) &&
+            validateTransNum(transNum) &&
+            validateAcc(dstacc, accList)) {
+          const [acc, grp] = accGrp.split('/');
+          await store.dispatch(mvTransaction({ frAcc: acc, transNum, toAcc: dstacc, date, grp, amt, note }));
+        }
+        break;
+      }
+      case 'add': {
+        if (validateDate(date, allowZero) &&
+            validateAccGrp(accGrp, accGrpList) &&
+            validateAmt(amt) &&
+            validateNote(note)) {
+          const [acc, grp] = accGrp.split('/');
+          await store.dispatch(updateTransaction({ acc, date, grp, amt, note }));
+        }
+        break;
+      }
+      default:
+        await store.dispatch(setError(`ERROR: Unable to process operation (${op}).`));
+    }
+  } catch (err) {
+    store.dispatch(setError(err.message));
   }
-  close(ACC);
-*/
+  res.redirect(`edit?edit_priacc=${priAcc}`);
 });
 
 router.post('/edit', function (req, res) {
@@ -64,7 +133,7 @@ router.post('/edit', function (req, res) {
   if (go !== null) {
     data.editId = null;
   }
-  res.redirect('/edit');
+  res.redirect('edit?edit_priacc=bank_2020');
 });
 
 module.exports = router;
