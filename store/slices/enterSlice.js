@@ -23,6 +23,7 @@ const applyFilter = createAsyncThunk(
   async (filter, thunkAPI) => {
     thunkAPI.dispatch(setFilter(filter));
     await thunkAPI.dispatch(refreshStore());
+    return filter;
   }
 );
 
@@ -204,7 +205,10 @@ const enterSlice = createSlice({
       .addCase(mergeAccounts.fulfilled, (state, account) => {
         state.msg = `${state.msg} Merge Successful.`.trim();
       })
-      // .addCase(applyFilter.fulfilled, (state, action) => { }) // No action needed for applyFilter.fulfilled
+      .addCase(applyFilter.fulfilled, (state, action) => {
+        const filter = action.payload;
+        state.msg = `${state.msg} Filter ${filter} applied.`;
+      })
       .addMatcher(isRejectedAction, (state, action) => {
         // Handle all rejected actions
         state.error = action.error.message;
