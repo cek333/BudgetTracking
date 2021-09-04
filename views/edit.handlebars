@@ -1,7 +1,7 @@
 <h1>Edit Mode</h1>
 {{!-- EDIT MODE --}}
 {{!-- # Msg area --}}
-{{#if (containsError msg)}}
+{{#if error}}
 <div class='error' id='msg'>{{msg}}</div>
 {{else}}
 <div class='info' id='msg'>{{msg}}</div>
@@ -73,8 +73,9 @@
       <div class='row' id={{join 'trans_' id}}>
         <div class='colDate'>{{date}}</div>
         <div class='colTrans'>
-          <form method='post' action='/edit'>
-            <button type='submit' name='submit_edit_trans' value={{id}}>
+          <form method='get' action={{editUrlWithId ../priAcc id}}>
+            <input type='hidden' name='edit_priacc' value={{../priAcc}} />
+            <button type='submit'>
               {{join 'Edit ' (fourDigit id)}}
             </button>
           </form>
@@ -138,8 +139,7 @@
         <select name='edit_priacc' id='edit_priacc'>
           {{> accListOpts aList=accList default='--' }}
         </select>
-        <input type='submit' name='submit_interactive_mode' id='submit_interactive_mode'
-          value='Edit Mode'>
+        <button type='submit'>Edit Mode</button>
       </div>
     </form>
   </div>

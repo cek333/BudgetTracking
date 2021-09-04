@@ -26,5 +26,8 @@ module.exports = {
   },
   matchesGrp: (accGrp, grp) => {
     return accGrp.indexOf(`/${grp}`) >= 0;
+  },
+  editUrlWithId: (acc, id) => {
+    return `/edit/${id}?edit_priacc=${acc}`;
   }
 };

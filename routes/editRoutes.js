@@ -2,16 +2,16 @@ const express = require('express');
 const router = express.Router();
 const store = require('../store/store');
 const {
-    refreshStore,
-    addTransaction,
-    rmvTransaction,
-    updateTransaction,
-    mvTransaction,
-    clearMessages,
-    setError,
-    setEditId,
-    getAccList,
-    getAccGrpList
+  refreshStore,
+  addTransaction,
+  rmvTransaction,
+  updateTransaction,
+  mvTransaction,
+  clearMessages,
+  setError,
+  setEditId,
+  getAccList,
+  getAccGrpList
 } = require('../store/slices/editSlice');
 const {
   validateDate,
@@ -19,9 +19,7 @@ const {
   validateAcc,
   validateAccGrp,
   validateNote,
-  validateTransNum,
-  getAccList,
-  getAccGrpList
+  validateTransNum
 } = require('./validateUtil');
 
 const transactions = [
@@ -42,14 +40,15 @@ const data = {
   priAccUrl: '/edit?edit_priacc=bank_2020',
   transactions,
   accList,
-  accGrpList,
-  editId: null
+  accGrpList
 };
 
 // Home page route
-router.get('/edit', function (req, res) {
-  console.log('get /edit');
-  res.render('edit', { layout: 'edit', ...data });
+router.get('/edit/:id?', function (req, res) {
+  const { id = null } = req.params;
+  const editId = (id === null) ? null : Number(id);
+  console.log('get /edit editId=', editId);
+  res.render('edit', { layout: 'edit', ...data, editId });
 });
 
 router.post('/editing', async function (req, res) {
@@ -74,7 +73,7 @@ router.post('/editing', async function (req, res) {
     // Clear previous error messages
     await store.dispatch(clearMessages());
     // Process post request
-    switch(op) {
+    switch (op) {
       case 'update': {
         if (validateDate(date, allowZero) &&
             validateAccGrp(accGrp, accGrpList) &&
