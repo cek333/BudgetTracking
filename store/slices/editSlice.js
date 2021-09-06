@@ -76,6 +76,7 @@ const initialState = {
     note: null
   },
   msg: '',
+  error: '',
   accList: [],
   accGrpList: [],
   transactions: [],
@@ -94,9 +95,10 @@ const editSlice = createSlice({
   reducers: {
     clearMessages: (state, action) => {
       state.msg = '';
+      state.error = '';
     },
     setError: (state, action) => {
-      state.msg = `${state.msg} ${action.payload}`.trim();
+      state.error = action.payload;
     },
     setEditId: (state, action) => {
       const editId = action.payload;
@@ -148,7 +150,7 @@ const editSlice = createSlice({
       })
       .addMatcher(isRejectedAction, (state, action) => {
         // Handle all rejected actions
-        state.msg = `${state.msg} ${action.error.message}`.trim();
+        state.error = `ERROR: ${action.error.message}`;
       });
   }
 });
