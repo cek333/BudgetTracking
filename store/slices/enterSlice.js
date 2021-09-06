@@ -211,7 +211,7 @@ const enterSlice = createSlice({
       })
       .addMatcher(isRejectedAction, (state, action) => {
         // Handle all rejected actions
-        state.error = action.error.message;
+        state.error = `ERROR: ${action.error.message}`;
       });
   }
 });
