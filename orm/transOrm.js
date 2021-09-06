@@ -84,6 +84,9 @@ const transOrm = {
       return Promise.reject(new Error(`Account ${acc} not initialized`));
     }
     const trans = await db[acc].findOne({ where: { id: transNum } });
+    if (trans === null) {
+      return Promise.reject(new Error(`Transaction ID ${transNum} not found in account ${acc}`));
+    }
     // Assign updated values
     trans.date = date;
     trans.category = grp;
