@@ -7,7 +7,9 @@ const testAccounts = [
   // trans test accounts
   'cash_in_hand', 'cash_in_hand2',
   // enter endpoint accounts
-  'enter1', 'enter2', 'enter3'
+  'enter1', 'enter2', 'enter3',
+  // edit endpoint accounts
+  'edit1', 'edit2'
 ];
 
 module.exports = async () => {
