@@ -109,6 +109,14 @@ const editSlice = createSlice({
         state.accGrpList = accGrpList;
         state.editAcc = editAcc;
         state.editAccUrl = `/edit?edit_priacc=${editAcc}`;
+        // Clear cached transaction
+        state.lastTransaction.date = new Date().toLocaleDateString();
+        state.lastTransaction.amt = null;
+        state.lastTransaction.accGrp = null;
+        state.lastTransaction.note = null;
+        // Clear messages
+        state.msg = '';
+        state.error = '';
       })
       .addCase(refreshTransactions.fulfilled, (state, action) => {
         state.transactions = action.payload;
