@@ -11,6 +11,7 @@ const {
   rmvTransactionsByGroup,
   copyAccount,
   mergeAccounts,
+  applyFilter,
   setError,
   getAccList,
   getAccGrpList
@@ -180,6 +181,18 @@ router.post('/cp_acc', async function (req, res) {
         validateName(toAcc)) {
       const cpTransBool = cpTrans === 'YES';
       await store.dispatch(copyAccount({ frAcc, toAcc, cpTrans: cpTransBool }));
+    }
+  } catch (err) {
+    store.dispatch(setError(err.message));
+  }
+  res.redirect('/');
+});
+
+router.post('/filter', async function (req, res) {
+  const { filter } = req.body;
+  try {
+    if (validateName(filter)) {
+      await store.dispatch(applyFilter(filter));
     }
   } catch (err) {
     store.dispatch(setError(err.message));

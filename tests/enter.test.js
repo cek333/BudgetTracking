@@ -2,27 +2,21 @@ const transOrm = require('../orm/transOrm');
 const store = require('../store/store');
 const app = require('../app/app');
 const request = require('supertest');
-const {
-  refreshStore,
-  addAccount,
-  rmvAccount,
-  addGroup,
-  rmvGroup,
-  addTransaction,
-  rmvTransaction,
-  rmvTransactionsByGroup,
-  copyAccount,
-  mergeAccounts,
-  applyFilter,
-  // selectors
-  getAccList,
-  getAccGrpList,
-} = require('../store/slices/enterSlice');
 const BLANK_ACC_GRP = '--/--';
 
-describe.skip('Testing the /enter endpoint', () => {
-  beforeAll(async () => {
-    await store.dispatch(applyFilter('enter'));
+describe('Testing the /enter endpoint', () => {
+  test('Apply filter', async () => {
+    try {
+      await request(app)
+        .post('/enter/filter')
+        .send({ filter: 'enter' })
+        .expect(302);
+      const state = store.getState();
+      expect(state.enter.error).toBeFalsy();
+      expect(state.enter.accFilter).toEqual('enter');
+    } catch (err) {
+      expect(err).toBeFalsy();
+    }
   });
   test('Add accounts', async () => {
     try {
