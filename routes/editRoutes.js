@@ -44,20 +44,28 @@ const data = {
 };
 
 // Home page route
-router.get('/edit/:id?', function (req, res) {
+router.get('/edit/:id?', async function (req, res) {
   const { id = null } = req.params;
   const editId = (id === null) ? null : Number(id);
+  const { edit_priacc: editAccQuery = '' } = req.query;
+  let state = store.getState();
+  if (editAccQuery !== '' && state.edit.editAcc !== editAccQuery) {
+    // load specified acc
+    await store.dispatch(refreshStore(editAccQuery));
+    // Get updated state
+    state = store.getState();
+  }
   console.log('get /edit editId=', editId);
   res.render('edit', { layout: 'edit', ...data, editId });
 });
 
-router.post('/editing', async function (req, res) {
+router.post('/edit', async function (req, res) {
   const {
     date,
     amt,
     edit_priacc: priAcc,
     grp: accGrp,
-    note: noteTmp,
+    note: noteTmp = '',
     op,
     dstacc = '', // For mvTrans
     trans_num: transNum // For rmvTrans/mvTrans/updateTrans
@@ -110,7 +118,7 @@ router.post('/editing', async function (req, res) {
             validateAmt(amt) &&
             validateNote(note)) {
           const [acc, grp] = accGrp.split('/');
-          await store.dispatch(updateTransaction({ acc, date, grp, amt, note }));
+          await store.dispatch(addTransaction({ acc, date, grp, amt, note }));
         }
         break;
       }
@@ -121,18 +129,6 @@ router.post('/editing', async function (req, res) {
     store.dispatch(setError(err.message));
   }
   res.redirect(`edit?edit_priacc=${priAcc}`);
-});
-
-router.post('/edit', function (req, res) {
-  console.log(req.body);
-  const { submit_edit_trans: editIdStr = null, go = null } = req.body;
-  if (editIdStr !== null) {
-    data.editId = Number(editIdStr);
-  }
-  if (go !== null) {
-    data.editId = null;
-  }
-  res.redirect('edit?edit_priacc=bank_2020');
 });
 
 module.exports = router;
