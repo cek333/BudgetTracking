@@ -1,6 +1,7 @@
 const { createSlice, createAsyncThunk } = require('@reduxjs/toolkit');
 const transOrm = require('../../orm/transOrm');
 const attrOrm = require('../../orm/attrOrm');
+const { currencyRound } = require('../../util/mathUtil');
 
 const refreshStore = createAsyncThunk(
   'edit/refreshStore',
@@ -20,7 +21,7 @@ const refreshTransactions = createAsyncThunk(
     // Add balance info
     let bal = 0;
     const transBal = trans.map(tr => {
-      bal += tr.amount;
+      bal = currencyRound(tr.amount + bal);
       return { ...tr, balance: bal };
     });
     return transBal;
