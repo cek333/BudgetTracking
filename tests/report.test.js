@@ -54,14 +54,14 @@ describe('Reporting', () => {
     },
     expenditures: {
       data: [
-        ['ccard', -248.85],
-        ['charity', -402.00],
-        ['electronics', -669.50],
-        ['family', -100.00],
-        ['house', -400.00],
-        ['travel', -235.00]
+        ['ccard', 248.85],
+        ['charity', 402.00],
+        ['electronics', 669.50],
+        ['family', 100.00],
+        ['house', 400.00],
+        ['travel', 235.00]
       ],
-      total: -2055.35
+      total: 2055.35
     }
   };
 
@@ -163,6 +163,7 @@ describe('Reporting', () => {
         .expect(302);
       const state = store.getState();
       expect(state.report.error).toBeFalsy();
+      expect(state.report.priAcc).toEqual(acc);
       expect(state.report.type).toEqual(type);
       expect(state.report.data.length).toEqual(DATA_RAW.length);
       state.report.data.forEach((trans, idx) => {
@@ -192,6 +193,7 @@ describe('Reporting', () => {
         .expect(302);
       const state = store.getState();
       expect(state.report.error).toBeFalsy();
+      expect(state.report.priAcc).toEqual(acc);
       expect(state.report.type).toEqual(type);
       expect(state.report.data.income.data.length)
         .toEqual(DATA_BALANCESHEET_IN_OUT.income.data.length);

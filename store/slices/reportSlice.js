@@ -24,6 +24,8 @@ const fetchReport = createAsyncThunk(
           balIn.data.push(grpSum);
           balIn.total = currencyRound(grpSum.sum + balIn.total);
         } else {
+          // Keep positive balance
+          grpSum.sum = grpSum.sum * -1;
           balOut.data.push(grpSum);
           balOut.total = currencyRound(grpSum.sum + balOut.total);
         }
@@ -39,11 +41,12 @@ const fetchReport = createAsyncThunk(
         }
       };
     }
-    return { data, type };
+    return { acc, data, type };
   }
 );
 
 const initialState = {
+  priAcc: '',
   error: '',
   data: [],
   type: 0
@@ -65,9 +68,11 @@ const reportSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchReport.fulfilled, (state, action) => {
+        const { acc, data, type } = action.payload;
         state.error = '';
-        state.data = action.payload.data;
-        state.type = action.payload.type;
+        state.priAcc = acc;
+        state.data = data;
+        state.type = type;
       })
       .addMatcher(isRejectedAction, (state, action) => {
         // Handle all rejected actions
