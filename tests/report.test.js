@@ -153,7 +153,7 @@ describe('Reporting', () => {
       expect(err).toBeFalsy();
     }
   });
-  test('Report Endpoint Full Raw Report', async () => {
+  test('/report Endpoint Full Raw Report', async () => {
     const startDate = 0;
     const endDate = 0;
     const type = 0; // raw
@@ -182,7 +182,7 @@ describe('Reporting', () => {
       expect(err).toBeFalsy();
     }
   });
-  test('Report Endpoint Full Balance Sheet Report', async () => {
+  test('/report Endpoint Full Balance Sheet Report', async () => {
     const startDate = 0;
     const endDate = 0;
     const type = 1; // balance sheet
