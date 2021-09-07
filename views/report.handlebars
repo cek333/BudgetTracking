@@ -1,0 +1,87 @@
+<h1>Edit Mode</h1>
+{{!-- EDIT MODE --}}
+{{!-- # Msg area --}}
+{{#if error}}
+<div class='error' id='msg'>{{error}}</div>
+{{else}}
+
+  {{!-- # Heading with links --}}
+  <div class='table'>
+    <div class='row'>
+      {{!-- # put link back to starting page --}}
+      <div class='colhead'><a href='/enter'>Back to main page</a></div>
+      <div class='colhead'><a name='top' href='#bottom'>To Bottom</a></div>
+    </div>
+    <div class='row'> 
+      <div class='title colhead'>
+        {{#if type}}Balance Sheet Report{{else}}Raw Report{{/if}}
+      </div>
+      <div class='title colhead'>{{priAcc}}</div>
+    </div>
+    {{!-- # Emtpty row to create space between heading and table below --}}
+    <div class='row'>
+      <div class='title colhead'>&nbsp;</div>
+      <div class='title colhead'>&nbsp;</div>
+    </div>
+  </div>
+
+  {{#if type}}
+    {{!-- Balance sheet report --}}
+    <p>INCOME</p>
+    <div class='table'>
+      {{#each data.income.data}}
+        <div class='row'>
+          <div class='colGrp'>{{category}}</div>
+          <div class='colAmt'>{{toDollars sum}}</div>
+        </div>
+      {{/each}}
+      <div class='row colgo'>
+        <div class='colGrp'>TOTAL</div>
+        <div class='colAmt'>{{data.income.total}}</div>
+      </div>
+    </div>
+    <br>
+    <p>EXPENDITURES</p>
+    <div class='table'>
+      {{#each data.expenditures.data}}
+        <div class='row'>
+          <div class='colGrp'>{{category}}</div>
+          <div class='colAmt'>{{toDollars sum}}</div>
+        </div>
+      {{/each}}
+      <div class='row colgo'>
+        <div class='colGrp'>TOTAL</div>
+        <div class='colAmt'>{{data.expenditures.total}}</div>
+      </div>
+    </div>
+  {{else}}
+    {{!-- # print out raw data --}}
+    {{!-- # File format: date, trans #, group, comments, amt, balance --}}
+    <div class='table fullwidth'>
+      {{#each data}}
+        <div class='row' id={{join 'trans_' id}}>
+          <div class='colDate'>{{date}}</div>
+          <div class='colTrans'>{{fourDigit id}}</div>
+          <div class='colGrp'>{{lowercase category}}</div>
+          <div class='colAmt'>{{toDollars amount}}</div>
+          <div class='colBal'>{{toDollars balance}}</div>
+          <div class='colNote'>&nbsp; {{note}}</div>
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+
+  <div class='table'>
+    {{!-- # empty row to create space between table above and footer --}}
+    <div class='row'>
+      <div class='colhead'>&nbsp;</div>
+      <div class='colcell'>&nbsp;</div>
+    </div>
+    <div class='row'>
+      {{!-- # put link back to starting page --}}
+      <div class='colhead'><a href='/enter'>Back to main page</a></div>
+      <div class='colcell'><a name='bottom' href='#top'>To Top</a></div>
+    </div>
+  </div>
+
+{{/if}}
