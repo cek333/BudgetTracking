@@ -9,7 +9,6 @@ const {
   mvTransaction,
   clearMessages,
   setError,
-  setEditId,
   getAccList,
   getAccGrpList
 } = require('../store/slices/editSlice');
@@ -55,7 +54,6 @@ router.get('/edit/:id?', async function (req, res) {
     // Get updated state
     state = store.getState();
   }
-  console.log('get /edit editId=', editId);
   res.render('edit', { layout: 'edit', ...data, editId });
 });
 
