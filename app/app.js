@@ -24,9 +24,11 @@ app.set('view engine', 'handlebars');
 const enterRoutes = require('../routes/enterRoutes.js');
 const editRoutes = require('../routes/editRoutes.js');
 const resetEnterMessages = require('../routes/resetEnterMessages.js');
+const reportRoutes = require('../routes/reportRoutes.js');
 app.post('/enter/*', resetEnterMessages);
 app.use(editRoutes);
 app.use('/enter', enterRoutes);
+app.use('/report', reportRoutes);
 
 // Connect to database
 db.sequelize.sync();
