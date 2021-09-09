@@ -1,6 +1,8 @@
 // Requiring necessary npm packages
 const express = require('express');
 const db = require('../models');
+const store = require('../store/store');
+const { refreshStore } = require('../store/slices/enterSlice');
 
 // Creating express app and configuring middleware needed for authentication
 const app = express();
@@ -26,12 +28,15 @@ const editRoutes = require('../routes/editRoutes.js');
 const resetEnterMessages = require('../routes/resetEnterMessages.js');
 const reportRoutes = require('../routes/reportRoutes.js');
 app.post('/enter/*', resetEnterMessages);
-app.use(editRoutes);
+app.use('/edit', resetEnterMessages, editRoutes);
 app.use('/enter', enterRoutes);
-app.use('/report', reportRoutes);
+app.use('/report', resetEnterMessages, reportRoutes);
 
 // Connect to database
 db.sequelize.sync();
+
+// Populate store
+store.dispatch(refreshStore());
 
 // If no API routes are hit, redirect to /enter
 app.use(function (req, res) {
