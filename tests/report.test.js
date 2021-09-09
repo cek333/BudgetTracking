@@ -157,9 +157,10 @@ describe('Reporting', () => {
     const startDate = 0;
     const endDate = 0;
     const type = 0; // raw
+    const typeStr = 'raw';
     try {
       await request(app)
-        .get(`/report?start_date=${startDate}&end_date=${endDate}&rpt_type=${type}&rpt_acc=${acc}`)
+        .get(`/report?start_date=${startDate}&end_date=${endDate}&rpt_type=${typeStr}&rpt_acc=${acc}`)
         .expect(302);
       const state = store.getState();
       expect(state.report.error).toBeFalsy();
@@ -187,9 +188,10 @@ describe('Reporting', () => {
     const startDate = 0;
     const endDate = 0;
     const type = 1; // balance sheet
+    const typeStr = 'bal';
     try {
       await request(app)
-        .get(`/report?start_date=${startDate}&end_date=${endDate}&rpt_type=${type}&rpt_acc=${acc}`)
+        .get(`/report?start_date=${startDate}&end_date=${endDate}&rpt_type=${typeStr}&rpt_acc=${acc}`)
         .expect(302);
       const state = store.getState();
       expect(state.report.error).toBeFalsy();
