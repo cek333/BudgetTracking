@@ -26,7 +26,7 @@ const attrOrm = {
     }
   },
   getAccounts: async function () {
-    const result = await db.Account.findAll();
+    const result = await db.Account.findAll({ order: [['name', 'ASC']] });
     return result.map(acc => acc.get('name'));
   },
   addGroupToAccount: async function (acc, grp) {
@@ -60,7 +60,8 @@ const attrOrm = {
   getGroups: async function (acc) {
     const account = await db.Account.findOne({
       where: { name: acc },
-      include: db.Category
+      include: db.Category,
+      order: [['name', 'ASC']]
     });
     if (account) {
       // console.log('getGroups:', account.toJSON(), account.Categories.toJSON());
