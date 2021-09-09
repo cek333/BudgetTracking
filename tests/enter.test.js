@@ -142,8 +142,8 @@ describe('Testing the /enter endpoint', () => {
   test('Remove Transactions by Group', async () => {
     try {
       await request(app)
-        .post('/enter/rmv_trans_by_grp')
-        .send({ rmv_grp: 'enter3/food' })
+        .post('/enter/rmv_grp')
+        .send({ rmv_grp: 'enter3/food', submit_rmv_grp: 'Remove Transactions By Group' })
         .expect(302);
       // Check that acc/grp list is unchanged
       const state = store.getState();
@@ -177,7 +177,7 @@ describe('Testing the /enter endpoint', () => {
     try {
       await request(app)
         .post('/enter/rmv_grp')
-        .send({ rmv_grp: 'enter3/food' })
+        .send({ rmv_grp: 'enter3/food', submit_rmv_grp: 'Remove Group' })
         .expect(302);
       // Check that acc/grp list doesn't contain 'food'
       const state = store.getState();
