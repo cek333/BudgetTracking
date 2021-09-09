@@ -153,7 +153,7 @@ const enterSlice = createSlice({
         const newAcc = action.payload;
         const accFilter = state.accFilter;
         state.msg = `${state.msg} Account(${newAcc}) created.`.trim();
-        if (accFilter && (newAcc.indexOf(accFilter) >= 0)) {
+        if ((accFilter && (newAcc.indexOf(accFilter) >= 0)) || accFilter === '') {
           state.accList = state.accList.concat(newAcc).sort();
         }
       })
@@ -207,7 +207,7 @@ const enterSlice = createSlice({
       })
       .addCase(applyFilter.fulfilled, (state, action) => {
         const filter = action.payload;
-        state.msg = `${state.msg} Filter ${filter} applied.`;
+        state.msg = `${state.msg} Filter '${filter}' applied.`;
       })
       .addMatcher(isRejectedAction, (state, action) => {
         // Handle all rejected actions
