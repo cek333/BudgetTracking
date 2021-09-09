@@ -1,7 +1,7 @@
 const attrOrm = require('../orm/attrOrm');
 const transOrm = require('../orm/transOrm');
 
-describe.skip('Performing Account Transactions', () => {
+describe('Performing Account Transactions', () => {
   const acc = 'cash_in_hand';
   let numTrans = 0;
   // Variables to store transaction numbers of transactions to remove

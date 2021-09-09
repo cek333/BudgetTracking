@@ -1,6 +1,6 @@
 const attrOrm = require('../orm/attrOrm');
 
-describe.skip('Modifying Account Attributes', () => {
+describe('Modifying Account Attributes', () => {
   /* Test Overview: Goal: to add the following accounts and groups:
      bank,electronics,clothes
      wallet,clothes
