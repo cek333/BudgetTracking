@@ -12,7 +12,8 @@ module.exports = {
     return text.toUpperCase();
   },
   toDollars: (num) => {
-    return num.toFixed(2);
+    // num could be null if cached lastTransaction value is null
+    return num === null ? null : num.toFixed(2);
   },
   fourDigit: (num) => {
     const numStr = num.toString();
