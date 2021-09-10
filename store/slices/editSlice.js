@@ -73,7 +73,7 @@ const initialState = {
   lastTransaction: {
     date: new Date().toLocaleDateString(),
     amt: null,
-    accGrp: null,
+    grp: null,
     note: null
   },
   msg: '',
@@ -116,7 +116,7 @@ const editSlice = createSlice({
         // Clear cached transaction
         state.lastTransaction.date = new Date().toLocaleDateString();
         state.lastTransaction.amt = null;
-        state.lastTransaction.accGrp = null;
+        state.lastTransaction.grp = null;
         state.lastTransaction.note = null;
         // Clear messages
         state.msg = '';
@@ -130,7 +130,7 @@ const editSlice = createSlice({
         state.msg = `${state.msg} Account(${acc}) Updated.`.trim();
         state.lastTransaction.date = date;
         state.lastTransaction.amt = amt;
-        state.lastTransaction.accGrp = `${acc}/${grp}`;
+        state.lastTransaction.grp = grp;
         state.lastTransaction.note = note;
       })
       .addCase(rmvTransaction.fulfilled, (state, action) => {

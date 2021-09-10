@@ -1,4 +1,3 @@
-<h1>Edit Mode</h1>
 {{!-- EDIT MODE --}}
 {{!-- # Msg area --}}
 {{#if error}}
@@ -102,7 +101,7 @@
     <div class='colGrp'>
       <select name='grp' id='grp'
         onBlur='validateAccGrp(this, document.getElementById("msg"))'>
-        {{> accGrpListOpts agList=accGrpList default=lastTransaction.accGrp }}
+        {{> accGrpListOpts agList=accGrpList default=lastTransaction.grp }}
       </select>
     </div>
     <div class='colAmt'>

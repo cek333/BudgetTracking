@@ -67,7 +67,7 @@ describe('Testing the /edit endpoint', () => {
       expect(lastTrans.balance).toEqual(TRANSACTIONS[2][3]);
       // Verify last cached transaction
       lastTrans = state.edit.lastTransaction;
-      expect(lastTrans.accGrp).toEqual(TRANSACTIONS[2][0]);
+      expect(TRANSACTIONS[2][0]).toMatch(lastTrans.grp);
       expect(lastTrans.date).toEqual(TRANSACTIONS[2][1]);
       expect(lastTrans.amt).toEqual(TRANSACTIONS[2][2]);
     } catch (err) {
