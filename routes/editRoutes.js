@@ -21,29 +21,6 @@ const {
   validateTransNum
 } = require('./validateUtil');
 
-/*
-const transactions = [
-  { date: '2010-10-10', id: 1000, category: 'mbna', note: 'paid balance', amount: 10, balance: 100 },
-  { date: '2010-11-10', id: 1010, category: 'visa', note: 'paid balance', amount: 20, balance: 80 },
-  { date: '2010-12-10', id: 1020, category: 'food', note: 'groceries', amount: 30, balance: 50 }
-];
-const accList = ['bank_2020', 'cash_2020', 'charity_2020'];
-const accGrpList = [
-  'bank_2020/mbna', 'bank_2020/visa', 'bank_2020/food',
-  'cash_2020/food', 'cash_2020/charity',
-  'charity_2020/africa', 'charity_2020/haiti'
-];
-const data = {
-  msg: 'test',
-  todaysDate: '2021-05-26',
-  priAcc: 'bank_2020',
-  priAccUrl: '/edit?edit_priacc=bank_2020',
-  transactions,
-  accList,
-  accGrpList
-};
-*/
-
 // Home page route
 router.get('/:id?', async function (req, res) {
   const { id = null } = req.params;
