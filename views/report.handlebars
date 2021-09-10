@@ -1,4 +1,3 @@
-<h1>Edit Mode</h1>
 {{!-- EDIT MODE --}}
 {{!-- # Msg area --}}
 {{#if error}}
@@ -37,7 +36,7 @@
       {{/each}}
       <div class='row colgo'>
         <div class='colGrp'>TOTAL</div>
-        <div class='colAmt'>{{data.income.total}}</div>
+        <div class='colAmt'>{{toDollars data.income.total}}</div>
       </div>
     </div>
     <br>
@@ -51,7 +50,7 @@
       {{/each}}
       <div class='row colgo'>
         <div class='colGrp'>TOTAL</div>
-        <div class='colAmt'>{{data.expenditures.total}}</div>
+        <div class='colAmt'>{{toDollars data.expenditures.total}}</div>
       </div>
     </div>
   {{else}}
