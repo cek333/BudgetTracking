@@ -25,7 +25,7 @@ const reportOrm = {
       orderClause = 'ORDER BY category';
     } else {
       // Raw Report
-      selectClause = 'date, category, amount, note';
+      selectClause = 'id, date, category, amount, note';
       orderClause = 'ORDER BY date';
     }
     const query = `SELECT ${selectClause} FROM :acc ${whereClause} ${groupClause} ${orderClause}`;
