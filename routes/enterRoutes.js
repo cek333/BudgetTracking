@@ -67,12 +67,13 @@ router.post('/add_trans', async function (req, res) {
         validateNote(note)) {
       const [acc, grp] = priAccGrp.split('/');
       const priAmt = Number(amt) * (sign === '-' ? -1 : 1);
-      await store.dispatch(addTransaction({ acc, date, grp, amt: priAmt, note }));
       if (linkAccGrp !== BLANK_ACC_GRP && validateAccGrp(linkAccGrp, accGrpList)) {
+        // Last transaction cached, so do linked transaction first (and cache primary transaction)
         const linkAmt = priAmt * -1;
         const [acc, grp] = linkAccGrp.split('/');
         await store.dispatch(addTransaction({ acc, date, grp, amt: linkAmt, note }));
       }
+      await store.dispatch(addTransaction({ acc, date, grp, amt: priAmt, note }));
     }
   } catch (err) {
     store.dispatch(setError(err.message));
