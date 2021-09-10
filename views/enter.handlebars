@@ -3,7 +3,11 @@
 <table class='head'>
   <tr>
     <td class='title'>Expense Tracker<br /><br /></td>
-    <td class='msg' id='msg'>{{msg}}</td>
+    {{#if error}}
+      <td class='error' id='msg'>{{error}}</td>
+    {{else}}
+      <td class='msg' id='msg'>{{msg}}</td>
+    {{/if}}
   </tr>
 </table>
 
@@ -14,9 +18,9 @@
     <td>
       {{!-- # ENTER A TRANSACTION FORM --}}
       <fieldset><legend>Enter a Transaction</legend> 
-        <form method='post' action='/enter' id='f_add_trans'>
+        <form method='post' action='/enter/add_trans' id='f_add_trans'>
           <label for='date'>Date:</label>
-          <input name='date' id='date' value={{todaysDate}} size=10>&nbsp;&nbsp;
+          <input name='date' id='date' value={{lastTransaction.date}} size=10>&nbsp;&nbsp;
           <span class='radio'>
             <input type='radio' name='sign' id='plus' value='+'>
             <label for='plus'>+</label>
@@ -26,13 +30,14 @@
             <label for='minus'>-</label>
           </span>&nbsp;&nbsp;
           <label for='amt'>Amt:</label>
-          <input name='amt' id='amt' size=9><br>
+          <input name='amt' id='amt' size=9 value={{lastTransaction.amt}}><br>
           <label for='pri_acc'>Account:</label>   
           <select name='pri_acc' id='pri_acc'>
-            {{> accGrpListOpts agList=accGrpList default='--' }}
+            {{> accGrpListOpts agList=accGrpList default=lastTransaction.accGrp }}
           </select><br>
           <label for='comments'>Comments:</label><br>
-          <textarea name='comments' id='comments' rows='3' cols='30'></textarea><br><br>  
+          <textarea name='comments' id='comments' rows='3' cols='30'>{{lastTransaction.note}}</textarea>
+          <br><br>
           <label for='link_acc'>(Optionally perform reverse operation on linked account.)<br>
             Linked Account:
           </label>
@@ -40,6 +45,15 @@
             {{> accGrpListOpts agList=accGrpList default='--' }}
           </select><br>  
           <input type='submit' name='submit_trans' id='submit_trans' value='Enter Transaction'>
+        </form>
+      </fieldset>
+      <br>
+
+      <fieldset><legend>Set Filter</legend>
+        <form method='post' action='/enter/filter' id='f_filter'>
+          <label for='filter'>Filter:</label>
+          <input name='filter' id='filter' size=30 value={{accFilter}}>
+          <input type='submit' name='submit_filter' id='submit_filter' value='Apply Filter'>
         </form>
       </fieldset>
       <br>
@@ -58,14 +72,14 @@
             {{> accListOpts aList=accList default='--' }}
           </select><br>
           <span class='radio'>
-            <input type='radio' name='rpt_type' id='balance_sheet' value='Balance Sheet'>
+            <input type='radio' name='rpt_type' id='balance_sheet' value='bal'>
             <label for='balance_sheet'>Balance Sheet</label>
           </span>
           <span class='radio'>
-            <input type='radio' name='rpt_type' id='raw_data' values='Raw Data' checked>
+            <input type='radio' name='rpt_type' id='raw_data' value='raw' checked>
             <label for='raw_data'>Raw Data</label>
           </span>&nbsp;&nbsp;
-          <input type='submit' name='submit_rpt' id='submit_rpt' value='Create Report'> 
+          <input type='submit' value='Create Report'>
         </form>
       </fieldset>
       <br>
@@ -77,14 +91,14 @@
           <select name='edit_priacc' id='edit_priacc'>
             {{> accListOpts aList=accList default='--' }}
           </select>
-          <input type='submit' name='submit_interactive_mode' id='submit_interactive_mode' value='Edit Mode'>
+          <input type='submit' value='Edit Mode'>
         </form>
       </fieldset>
       <br>
 
       {{!-- # MEREGE TWO ACCOUNTS --}}
       <fieldset><legend>Merge Accounts</legend>
-        <form method='post', action='/enter' id='f_merge'>
+        <form method='post', action='/enter/merge' id='f_merge'>
           <label for='base_acc'>Base account:</label>
           <select name='base_acc' id='base_acc'>
             {{> accListOpts aList=accList default='--' }}
@@ -104,7 +118,7 @@
     <td>
       {{!-- # ADD AN ACCOUNT FORM --}}
       <fieldset><legend>Add an Account</legend>
-        <form method='post' action='/enter' id='f_add_acc'>
+        <form method='post' action='/enter/add_acc' id='f_add_acc'>
           <label for='new_acc'>Account:</label>
           <input name='new_acc' id='new_acc' size=30>
           <input type='submit' name='submit_new_acc' id='submit_new_acc' value='Add Account'>
@@ -114,7 +128,7 @@
 
       {{!-- # REMOVE AN ACCOUNT --}}
       <fieldset><legend>Remove an Account</legend>
-        <form method='post' action='/enter' id='f_rmv_acc'>
+        <form method='post' action='/enter/rmv_acc' id='f_rmv_acc'>
           <label for='rmv_acc'>Account:</label>
           <select name='rmv_acc' id='rmv_acc'>
             {{> accListOpts aList=accList default='--' }}
@@ -126,7 +140,7 @@
 
       {{!-- # ADD A GROUP FORM --}}
       <fieldset><legend>Add a Group</legend>
-        <form method='post'  action='/enter' id='f_add_grp'>
+        <form method='post'  action='/enter/add_grp' id='f_add_grp'>
           <label for='grp_acc'>Account:</label>
           <select name='grp_acc' id='grp_acc'>
             {{> accListOpts aList=accList default='--' }}
@@ -140,7 +154,7 @@
 
       {{!-- # REMOVE A GROUP --}}
       <fieldset><legend>Remove a Group</legend>
-        <form method='post' action='/enter' id='f_rmv_grp'>
+        <form method='post' action='/enter/rmv_grp' id='f_rmv_grp'>
           <label for='rmv_grp'>Groups:</label>
           <select name='rmv_grp' id='rmv_grp'>
             {{> accGrpListOpts agList=accGrpList default='--' }}
@@ -148,7 +162,7 @@
           <input type='submit' name='submit_rmv_grp' id='submit_rmv_grp'
             value='Remove Group'>
           <span> OR </span>
-          <input type='submit' name='submit_rmv_grp_trans' id='submit_rmv_grp_trans'
+          <input type='submit' name='submit_rmv_grp' id='submit_rmv_grp_trans'
             value='Remove Transactions By Group'>
         </form>
       </fieldset>
@@ -156,7 +170,7 @@
 
       {{!-- # REMOVE A TRANSACTION --}}
       <fieldset><legend>Remove a Transaction</legend>
-        <form method='post' action='/enter' id='f_rmv_trans'>
+        <form method='post' action='/enter/rmv_trans' id='f_rmv_trans'>
           <label for='trans_acc'>Account:</label>
           <select name='trans_acc' id='trans_acc'>
             {{> accListOpts aList=accList default='--' }}
@@ -171,7 +185,7 @@
 
       {{!-- # COPY AN ACCOUNT --}}
       <fieldset><legend>Copy an Account</legend>
-        <form method='post' action='/enter' id='f_copy'>
+        <form method='post' action='/enter/cp_acc' id='f_copy'>
           <label for='old_acc'>Account to be copied:</label>
           <select name='old_acc' id='old_acc'>
             {{> accListOpts aList=accList default='--' }}

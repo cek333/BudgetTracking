@@ -21,6 +21,7 @@ const {
   validateTransNum
 } = require('./validateUtil');
 
+/*
 const transactions = [
   { date: '2010-10-10', id: 1000, category: 'mbna', note: 'paid balance', amount: 10, balance: 100 },
   { date: '2010-11-10', id: 1010, category: 'visa', note: 'paid balance', amount: 20, balance: 80 },
@@ -41,9 +42,10 @@ const data = {
   accList,
   accGrpList
 };
+*/
 
 // Home page route
-router.get('/edit/:id?', async function (req, res) {
+router.get('/:id?', async function (req, res) {
   const { id = null } = req.params;
   const editId = (id === null) ? null : Number(id);
   const { edit_priacc: editAccQuery = '' } = req.query;
@@ -54,10 +56,10 @@ router.get('/edit/:id?', async function (req, res) {
     // Get updated state
     state = store.getState();
   }
-  res.render('edit', { layout: 'edit', ...data, editId });
+  res.render('edit', { layout: 'edit', ...state.edit, editId });
 });
 
-router.post('/edit', async function (req, res) {
+router.post('/', async function (req, res) {
   const {
     date,
     amt,
@@ -87,7 +89,8 @@ router.post('/edit', async function (req, res) {
             validateNote(note) &&
             validateTransNum(transNum)) {
           const [acc, grp] = accGrp.split('/');
-          await store.dispatch(updateTransaction({ acc, transNum, date, grp, amt, note }));
+          const amtVal = Number(amt);
+          await store.dispatch(updateTransaction({ acc, transNum, date, grp, amt: amtVal, note }));
         }
         break;
       }
@@ -106,7 +109,8 @@ router.post('/edit', async function (req, res) {
             validateTransNum(transNum) &&
             validateAcc(dstacc, accList)) {
           const [acc, grp] = accGrp.split('/');
-          await store.dispatch(mvTransaction({ frAcc: acc, transNum, toAcc: dstacc, date, grp, amt, note }));
+          const amtVal = Number(amt);
+          await store.dispatch(mvTransaction({ frAcc: acc, transNum, toAcc: dstacc, date, grp, amt: amtVal, note }));
         }
         break;
       }
@@ -116,7 +120,8 @@ router.post('/edit', async function (req, res) {
             validateAmt(amt) &&
             validateNote(note)) {
           const [acc, grp] = accGrp.split('/');
-          await store.dispatch(addTransaction({ acc, date, grp, amt, note }));
+          const amtVal = Number(amt);
+          await store.dispatch(addTransaction({ acc, date, grp, amt: amtVal, note }));
         }
         break;
       }
@@ -126,7 +131,7 @@ router.post('/edit', async function (req, res) {
   } catch (err) {
     store.dispatch(setError(err.message));
   }
-  res.redirect(`edit?edit_priacc=${priAcc}`);
+  res.redirect(`/edit?edit_priacc=${priAcc}`);
 });
 
 module.exports = router;

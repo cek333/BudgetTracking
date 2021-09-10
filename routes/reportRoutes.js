@@ -17,7 +17,7 @@ router.get('/', async function (req, res) {
     rpt_acc: acc,
     rpt_type: type
   } = req.query;
-  type = Number(type) === 1 ? 1 : 0;
+  type = type === 'bal' ? 1 : 0;
   startDate = startDate === '0' ? 0 : startDate;
   endDate = endDate === '0' ? 0 : endDate;
   const allowZero = 1; // specifying 0 => all dates
@@ -32,9 +32,8 @@ router.get('/', async function (req, res) {
   } catch (err) {
     store.dispatch(setError(err.message));
   }
-  res.redirect('/enter');
-  // state = store.getState();
-  // res.render('report', { layout: 'report', ...state.report });
+  state = store.getState();
+  res.render('report', { layout: 'edit', ...state.report });
 });
 
 module.exports = router;

@@ -26,6 +26,7 @@ const {
   validateTransNum
 } = require('./validateUtil');
 
+/*
 const transactions = [
   { date: '2010-10-10', transNum: 1000, group: 'mbna', comments: 'paid balance', amt: 10, balance: 100 },
   { date: '2010-11-10', transNum: 1010, group: 'visa', comments: 'paid balance', amt: 20, balance: 80 },
@@ -46,10 +47,11 @@ const data = {
   accList,
   accGrpList
 };
+*/
 
 router.get('/', function (req, res) {
-  console.log('get /enter');
-  res.render('enter', { layout: 'enter', ...data });
+  const state = store.getState();
+  res.render('enter', { layout: 'enter', ...state.enter });
 });
 
 router.post('/add_trans', async function (req, res) {
@@ -132,26 +134,16 @@ router.post('/add_grp', async function (req, res) {
 });
 
 router.post('/rmv_grp', async function (req, res) {
-  const { rmv_grp: rmvAccGrp } = req.body;
+  const { rmv_grp: rmvAccGrp, submit_rmv_grp: op } = req.body;
   const accGrpList = getAccGrpList(store.getState());
   try {
     if (validateAccGrp(rmvAccGrp, accGrpList)) {
       const [acc, grp] = rmvAccGrp.split('/');
-      await store.dispatch(rmvGroup({ acc, grp }));
-    }
-  } catch (err) {
-    store.dispatch(setError(err.message));
-  }
-  res.redirect('/');
-});
-
-router.post('/rmv_trans_by_grp', async function (req, res) {
-  const { rmv_grp: rmvAccGrp } = req.body;
-  const accGrpList = getAccGrpList(store.getState());
-  try {
-    if (validateAccGrp(rmvAccGrp, accGrpList)) {
-      const [acc, grp] = rmvAccGrp.split('/');
-      await store.dispatch(rmvTransactionsByGroup({ acc, grp }));
+      if (op === 'Remove Group') {
+        await store.dispatch(rmvGroup({ acc, grp }));
+      } else {
+        await store.dispatch(rmvTransactionsByGroup({ acc, grp }));
+      }
     }
   } catch (err) {
     store.dispatch(setError(err.message));
@@ -191,18 +183,16 @@ router.post('/cp_acc', async function (req, res) {
 router.post('/filter', async function (req, res) {
   const { filter } = req.body;
   try {
-    if (validateName(filter)) {
-      await store.dispatch(applyFilter(filter));
-    }
+    await store.dispatch(applyFilter(filter));
   } catch (err) {
     store.dispatch(setError(err.message));
   }
   res.redirect('/');
 });
 
-router.post('/', function (req, res) {
-  console.log(req.body);
-  res.redirect('/');
-});
+// router.post('/', function (req, res) {
+//   console.log(req.body);
+//   res.redirect('/');
+// });
 
 module.exports = router;
