@@ -1,4 +1,3 @@
-<h1>Enter</h1>
 {{!-- DISPLAY HEADING and MESSAGE --}}
 <table class='head'>
   <tr>
@@ -22,18 +21,18 @@
           <label for='date'>Date:</label>
           <input name='date' id='date' value={{lastTransaction.date}} size=10>&nbsp;&nbsp;
           <span class='radio'>
-            <input type='radio' name='sign' id='plus' value='+'>
+            <input type='radio' name='sign' id='plus' value='+' {{#if (matches 1 lastTransaction.sign)}}checked{{/if}}>
             <label for='plus'>+</label>
           </span>
           <span class='radio'>
-            <input type='radio' name='sign' id='minus' value='-' checked>
+            <input type='radio' name='sign' id='minus' value='-' {{#if (matches -1 lastTransaction.sign)}}checked{{/if}}>
             <label for='minus'>-</label>
           </span>&nbsp;&nbsp;
           <label for='amt'>Amt:</label>
           <input name='amt' id='amt' size=9 value={{lastTransaction.amt}}><br>
           <label for='pri_acc'>Account:</label>   
           <select name='pri_acc' id='pri_acc'>
-            {{> accGrpListOpts agList=accGrpList default=lastTransaction.accGrp }}
+            {{> accGrpListOpts agList=accGrpList default=lastTransaction.grp }}
           </select><br>
           <label for='comments'>Comments:</label><br>
           <textarea name='comments' id='comments' rows='3' cols='30'>{{lastTransaction.note}}</textarea>

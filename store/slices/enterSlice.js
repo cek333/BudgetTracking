@@ -106,8 +106,9 @@ const mergeAccounts = createAsyncThunk(
 const initialState = {
   lastTransaction: {
     date: new Date().toLocaleDateString(),
+    sign: -1,
     amt: null,
-    accGrp: null,
+    grp: null,
     note: null
   },
   msg: '',
@@ -148,6 +149,11 @@ const enterSlice = createSlice({
         state.accGrpList = accFilter
           ? accGrpList.filter(accGrp => accGrp.indexOf(accFilter) >= 0)
           : accGrpList;
+        state.lastTransaction.date = new Date().toLocaleDateString();
+        state.lastTransaction.sign = -1;
+        state.lastTransaction.amt = null;
+        state.lastTransaction.grp = null;
+        state.lastTransaction.note = null;
       })
       .addCase(addAccount.fulfilled, (state, action) => {
         const newAcc = action.payload;
@@ -180,11 +186,13 @@ const enterSlice = createSlice({
       })
       .addCase(addTransaction.fulfilled, (state, action) => {
         const { acc, date, grp, amt, note } = action.payload;
+        const sign = Math.sign(amt);
         state.msg = `${state.msg} Account(${acc}) Updated.`.trim();
         state.lastTransaction.date = date;
-        state.lastTransaction.amt = amt;
-        state.lastTransaction.accGrp = `${acc}/${grp}`;
-        state.lastTransaction.note = note;
+        state.lastTransaction.sign = sign;
+        state.lastTransaction.amt = (amt * sign); // store +ve value
+        state.lastTransaction.grp = grp;
+        state.lastTransaction.note = note === 'n/a' ? '' : note;
       })
       .addCase(rmvTransaction.fulfilled, (state, action) => {
         const { acc, transNum } = action.payload;
