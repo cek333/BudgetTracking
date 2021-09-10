@@ -161,7 +161,7 @@ describe('Reporting', () => {
     try {
       await request(app)
         .get(`/report?start_date=${startDate}&end_date=${endDate}&rpt_type=${typeStr}&rpt_acc=${acc}`)
-        .expect(302);
+        .expect(200);
       const state = store.getState();
       expect(state.report.error).toBeFalsy();
       expect(state.report.priAcc).toEqual(acc);
@@ -192,7 +192,7 @@ describe('Reporting', () => {
     try {
       await request(app)
         .get(`/report?start_date=${startDate}&end_date=${endDate}&rpt_type=${typeStr}&rpt_acc=${acc}`)
-        .expect(302);
+        .expect(200);
       const state = store.getState();
       expect(state.report.error).toBeFalsy();
       expect(state.report.priAcc).toEqual(acc);
