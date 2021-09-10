@@ -23,11 +23,13 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // Import routes and give the server access to them.
-const enterRoutes = require('../routes/enterRoutes.js');
-const editRoutes = require('../routes/editRoutes.js');
-const resetEnterMessages = require('../routes/resetEnterMessages.js');
-const reportRoutes = require('../routes/reportRoutes.js');
-app.post('/enter/*', resetEnterMessages);
+const enterRoutes = require('../routes/enterRoutes');
+const editRoutes = require('../routes/editRoutes');
+const reportRoutes = require('../routes/reportRoutes');
+// Middleware helpers
+const resetEnterMessages = require('../routes/resetEnterMessages');
+const clearEditData = require('../routes/clearEditData');
+app.post('/enter/*', resetEnterMessages, clearEditData);
 app.use('/edit', resetEnterMessages, editRoutes);
 app.use('/enter', enterRoutes);
 app.use('/report', resetEnterMessages, reportRoutes);
