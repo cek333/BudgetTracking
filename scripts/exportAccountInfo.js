@@ -9,7 +9,7 @@ const {
 
 async function main() {
   if (process.argv.length < 3) {
-    console.log('node importAccountInfo.js out.csv');
+    console.log('node exportAccountInfo.js out.csv');
     process.exit(1);
   }
   const fileOut = process.argv[2];
@@ -22,9 +22,11 @@ async function main() {
     const groups = await getGroups(acc);
     accInfo.push(`${acc},${groups}${groups.length >= 1 ? ',' : ''}`);
   }
-  writeDataToFile(fileOut, accInfo.join('\n'));
+  const ret = writeDataToFile(fileOut, accInfo.join('\n'));
+  if (ret) {
+    console.log(`${fileOut} generated.`);
+  }
   await db.sequelize.close();
-  console.log(`${fileOut} generated.`);
 }
 
 main();
