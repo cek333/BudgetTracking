@@ -28,9 +28,10 @@ function csvToArray(dataIn) {
     let lineNoText;
     let text = null;
     if (quoteCheck) {
-      text = quoteCheck[1];
+      const textWithQuotes = quoteCheck[0];
+      text = quoteCheck[1]; // text without quotes
       // Replace quoted string with placeholder string
-      lineNoText = csvRow.replace(text, '###text###');
+      lineNoText = csvRow.replace(textWithQuotes, '###text###');
     } else {
       lineNoText = csvRow;
     }
@@ -62,9 +63,11 @@ function csvArrToJson(arrOfRows, keys) {
 
 function writeDataToFile(fileOut, data) {
   try {
-    fs.writeFileSync(fileOut, data);
+    fs.writeFileSync(fileOut, data, { flag: 'wx' });
+    return true;
   } catch (err) {
     console.error(`Unable to write file: ${err}`);
+    return false;
   }
 }
 
