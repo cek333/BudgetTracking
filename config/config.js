@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
   development: {
     storage: path.join(__dirname, '..', 'db', 'budget.sqlite'),
-    dialect: 'sqlite'
+    dialect: 'sqlite',
+    logging: false // supress logs
   },
   test: {
     storage: path.join(__dirname, '..', 'db', 'budget_test.sqlite'),
@@ -16,6 +17,7 @@ module.exports = {
   // },
   production: {
     storage: path.join(__dirname, '..', 'db', 'budget.sqlite'),
-    dialect: 'sqlite'
+    dialect: 'sqlite',
+    logging: false // supress logs
   }
 };
