@@ -1,3 +1,4 @@
+const path = require('path');
 const db = require('../models');
 const {
   getDataFromFile,
@@ -10,15 +11,15 @@ const {
   addGroupToAccount,
   getGroups
 } = require('../orm/attrOrm');
-const { addTransaction } = require('../orm/transOrm');
+const transOrm = require('../orm/transOrm');
 
 async function main() {
   if (process.argv.length < 3) {
-    console.log('node importAccountInfo.js accName.acc');
+    console.log('node importTransactions.js accName.acc');
     process.exit(1);
   }
   const fileIn = process.argv[2];
-  const accIn = fileIn.replace('.acc', '');
+  const accIn = path.basename(fileIn).replace('.acc', '');
 
   // Connect to database
   await db.sequelize.sync();
@@ -42,7 +43,7 @@ async function main() {
   for (let idx = 0; idx < dataAsArr.length; idx++) {
     let [date, id, grp, note, amt, bal] = dataAsArr[idx];
     grp = grp.toLowerCase();
-    await addTransaction(accIn, date, grp, Number(amt), note);
+    await transOrm.addTransaction(accIn, date, grp, Number(amt), note);
     if (!(existingGroups.includes(grp) || newGroupsSet.has(grp))) {
       newGroupsSet.add(grp);
     }
