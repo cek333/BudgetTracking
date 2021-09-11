@@ -44,6 +44,7 @@ async function main() {
       await addGroupToAccount(accName, grpName);
     }
   }
+  await db.sequelize.close();
 }
 
 main();

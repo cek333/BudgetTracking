@@ -23,6 +23,7 @@ async function main() {
     accInfo.push(`${acc},${groups}${groups.length >= 1 ? ',' : ''}`);
   }
   writeDataToFile(fileOut, accInfo.join('\n'));
+  await db.sequelize.close();
   console.log(`${fileOut} generated.`);
 }
 
