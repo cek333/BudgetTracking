@@ -18,6 +18,7 @@ div.table { display: table; border-collapse: collapse; }
 .colshared { display: inline; }
 .colgo { border: solid; }
 div#msg { position: fixed; right: 300px; top: 45px;
+          padding: 5px;
           background: rgb(0, 0, 0); /* fallback */
           background: rgba(255, 255, 255, 1); }
 div.info { color: green; }
