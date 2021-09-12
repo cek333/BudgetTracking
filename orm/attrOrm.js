@@ -61,7 +61,7 @@ const attrOrm = {
     const account = await db.Account.findOne({
       where: { name: acc },
       include: db.Category,
-      order: [['name', 'ASC']]
+      order: [[db.Category, 'name', 'ASC']]
     });
     if (account) {
       // console.log('getGroups:', account.toJSON(), account.Categories.toJSON());
