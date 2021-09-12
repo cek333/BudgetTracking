@@ -6,7 +6,7 @@ module.exports = {
     primaryKey: true
   },
   date: {
-    type: DataTypes.DATEONLY,
+    type: DataTypes.STRING,
     allowNull: false
   },
   category: {
