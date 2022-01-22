@@ -73,6 +73,7 @@ const initialState = {
   lastTransaction: {
     date: new Date().toLocaleDateString(),
     amt: null,
+    acc: null,
     grp: null,
     note: null
   },
@@ -116,6 +117,7 @@ const editSlice = createSlice({
         // Clear cached transaction
         state.lastTransaction.date = new Date().toLocaleDateString();
         state.lastTransaction.amt = null;
+        state.lastTransaction.acc = null;
         state.lastTransaction.grp = null;
         state.lastTransaction.note = null;
         // Clear messages
@@ -130,6 +132,7 @@ const editSlice = createSlice({
         state.msg = `${state.msg} Account(${acc}) Updated.`.trim();
         state.lastTransaction.date = date;
         state.lastTransaction.amt = amt;
+        state.lastTransaction.acc = acc;
         state.lastTransaction.grp = grp;
         state.lastTransaction.note = note;
       })

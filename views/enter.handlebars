@@ -32,7 +32,7 @@
           <input name='amt' id='amt' size=9 value={{lastTransaction.amt}}><br>
           <label for='pri_acc'>Account:</label>   
           <select name='pri_acc' id='pri_acc'>
-            {{> accGrpListOpts agList=accGrpList default=lastTransaction.grp }}
+            {{> accGrpListOpts agList=accGrpList selAcc=lastTransaction.acc selGrp=lastTransaction.grp }}
           </select><br>
           <label for='comments'>Comments:</label><br>
           <textarea name='comments' id='comments' rows='3' cols='30'>{{lastTransaction.note}}</textarea>
@@ -41,7 +41,7 @@
             Linked Account:
           </label>
           <select name='link_acc' id='link_acc'>
-            {{> accGrpListOpts agList=accGrpList default='--' }}
+            {{> accGrpListOpts agList=accGrpList selAcc='--' selGrp='--' }}
           </select><br>  
           <input type='submit' name='submit_trans' id='submit_trans' value='Enter Transaction'>
         </form>
@@ -156,7 +156,7 @@
         <form method='post' action='/enter/rmv_grp' id='f_rmv_grp'>
           <label for='rmv_grp'>Groups:</label>
           <select name='rmv_grp' id='rmv_grp'>
-            {{> accGrpListOpts agList=accGrpList default='--' }}
+            {{> accGrpListOpts agList=accGrpList selAcc='--' selGrp='--' }}
           </select><br>
           <input type='submit' name='submit_rmv_grp' id='submit_rmv_grp'
             value='Remove Group'>

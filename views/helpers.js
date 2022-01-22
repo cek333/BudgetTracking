@@ -27,5 +27,8 @@ module.exports = {
   },
   matchesGrp: (accGrp, grp) => {
     return accGrp.indexOf(`/${grp}`) >= 0;
+  },
+  matchesAccGrp: (accGrp, acc, grp) => {
+    return accGrp.indexOf(`${acc}/${grp}`) >= 0;
   }
 };

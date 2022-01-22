@@ -44,7 +44,7 @@
           {{fourDigit id}}
         </div>
         <div class='colGrp'>
-          <select name='grp'>{{> accGrpListOpts agList=../accGrpList default=category }}</select>
+          <select name='grp'>{{> accGrpListOpts agList=../accGrpList selAcc='' selGrp=category }}</select>
         </div>
         <div class='colAmt'>
           <input type='text' name='amt' value={{toDollars amount}} size='9'
@@ -101,7 +101,7 @@
     <div class='colGrp'>
       <select name='grp' id='grp'
         onBlur='validateAccGrp(this, document.getElementById("msg"))'>
-        {{> accGrpListOpts agList=accGrpList default=lastTransaction.grp }}
+        {{> accGrpListOpts agList=accGrpList selAcc='' selGrp=lastTransaction.grp }}
       </select>
     </div>
     <div class='colAmt'>

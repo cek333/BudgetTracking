@@ -108,6 +108,7 @@ const initialState = {
     date: new Date().toLocaleDateString(),
     sign: -1,
     amt: null,
+    acc: null,
     grp: null,
     note: null
   },
@@ -152,6 +153,7 @@ const enterSlice = createSlice({
         state.lastTransaction.date = new Date().toLocaleDateString();
         state.lastTransaction.sign = -1;
         state.lastTransaction.amt = null;
+        state.lastTransaction.acc = null;
         state.lastTransaction.grp = null;
         state.lastTransaction.note = null;
       })
@@ -191,6 +193,7 @@ const enterSlice = createSlice({
         state.lastTransaction.date = date;
         state.lastTransaction.sign = sign;
         state.lastTransaction.amt = (amt * sign); // store +ve value
+        state.lastTransaction.acc = acc;
         state.lastTransaction.grp = grp;
         state.lastTransaction.note = note === 'n/a' ? '' : note;
       })
