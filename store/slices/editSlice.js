@@ -1,7 +1,7 @@
 const { createSlice, createAsyncThunk } = require('@reduxjs/toolkit');
 const transOrm = require('../../orm/transOrm');
 const attrOrm = require('../../orm/attrOrm');
-const { currencyRound } = require('../../util/mathUtil');
+const { currencyRound, getDateYYYYMMDD } = require('../../util/mathUtil');
 
 const refreshStore = createAsyncThunk(
   'edit/refreshStore',
@@ -71,7 +71,7 @@ const mvTransaction = createAsyncThunk(
 
 const initialState = {
   lastTransaction: {
-    date: new Date().toLocaleDateString(),
+    date: getDateYYYYMMDD(),
     amt: null,
     acc: null,
     grp: null,
@@ -115,7 +115,7 @@ const editSlice = createSlice({
         state.editAcc = editAcc;
         state.editAccUrl = `/edit?edit_priacc=${editAcc}`;
         // Clear cached transaction
-        state.lastTransaction.date = new Date().toLocaleDateString();
+        state.lastTransaction.date = getDateYYYYMMDD();
         state.lastTransaction.amt = null;
         state.lastTransaction.acc = null;
         state.lastTransaction.grp = null;

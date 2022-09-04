@@ -10,7 +10,16 @@ const currencyRound = (num) => {
   return roundToDecimalPlaces(num, 2);
 };
 
+const getDateYYYYMMDD = () => {
+  // Src: https://stackoverflow.com/questions/23593052/format-javascript-date-as-yyyy-mm-dd
+  const curDate = new Date();
+  const timezoneOffset = curDate.getTimezoneOffset();
+  const timezoneDate = new Date(curDate.getTime() - (timezoneOffset * 60 * 1000));
+  return timezoneDate.toISOString().split('T')[0];
+};
+
 module.exports = {
   roundToDecimalPlaces,
-  currencyRound
+  currencyRound,
+  getDateYYYYMMDD
 };

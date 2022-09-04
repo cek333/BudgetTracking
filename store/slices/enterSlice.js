@@ -1,6 +1,7 @@
 const { createSlice, createAsyncThunk } = require('@reduxjs/toolkit');
 const transOrm = require('../../orm/transOrm');
 const attrOrm = require('../../orm/attrOrm');
+const { getDateYYYYMMDD } = require('../../util/mathUtil');
 
 const refreshStore = createAsyncThunk(
   'enter/refreshStore',
@@ -105,7 +106,7 @@ const mergeAccounts = createAsyncThunk(
 
 const initialState = {
   lastTransaction: {
-    date: new Date().toLocaleDateString(),
+    date: getDateYYYYMMDD(),
     sign: -1,
     amt: null,
     acc: null,
@@ -150,7 +151,7 @@ const enterSlice = createSlice({
         state.accGrpList = accFilter
           ? accGrpList.filter(accGrp => accGrp.indexOf(accFilter) >= 0)
           : accGrpList;
-        state.lastTransaction.date = new Date().toLocaleDateString();
+        state.lastTransaction.date = getDateYYYYMMDD();
         state.lastTransaction.sign = -1;
         state.lastTransaction.amt = null;
         state.lastTransaction.acc = null;
